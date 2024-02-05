@@ -11,9 +11,20 @@ public class Triangulo {
         this.lado3 = lado3;
     }
 
+    public static boolean esTriangulo(double lado1, double lado2, double lado3) {
+        boolean condicion1 = lado1 + lado2 > lado3;
+        boolean condicion2 = lado1 + lado3 > lado2;
+        boolean condicion3 = lado2 + lado3 > lado1;
+
+        return condicion1 && condicion2 && condicion3;
+    }
 
     public String identificarTipoTriangulo() {
-
+        if(!esTriangulo(lado1, lado2, lado3)){
+            System.out.println("No es posible un triángulo con esos lados, la suma de dos lados debe ser mayor al tercer lado");
+            logger.escribir("No es posible un triángulo con esos lados, la suma de dos lados debe ser mayor al tercer lado");
+            System.exit(0);
+        }
         if (lado1 == lado2 && lado2 == lado3) {
             return "Equilátero";
         } else if (lado1 == lado2 || lado1 == lado3 || lado2 == lado3) {
@@ -55,8 +66,20 @@ public class Triangulo {
         double lado2 = Triangulo.obtenerLado(scanner);
         System.out.println("Ingrese la longitud del lado 3:");
         double lado3 = Triangulo.obtenerLado(scanner);
-
+        Triangulo.obtenerDatosTriangulo(lado1,lado2,lado3);
     }
 
+    public static void obtenerDatosTriangulo(double lado1, double lado2, double lado3){
+        try {
+            Triangulo triangulo = new Triangulo(lado1, lado2, lado3);
+            System.out.println("El tipo de triángulo es: " + triangulo.identificarTipoTriangulo());
+            System.out.println("El área del triángulo es: " + triangulo.calcularArea());
+        } catch (InputMismatchException e) {
+            logger.escribir("Los datos ingresados no tienen el formato correcto, se esperaba un numero entero positivo o decimal separado por coma");
+            System.out.println("Error: Los datos ingresados no son correctos");
 
+        } catch (Exception e) {
+            logger.escribir("Se produjo un error al obtener los datos del triángulo");
+        }
+    }
 }
